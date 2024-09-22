@@ -1,0 +1,28 @@
+SELECT
+FORMAT_DATE('%d-%m-%Y', PARSE_DATE('%Y%m%d', SUBSTR(CAST(DATE AS STRING), 1, 8))) AS FormattedDate,
+DocumentIdentifier,
+SUBSTR(V2Locations, 1, 500) AS LimitedV2Locations,
+SPLIT(SPLIT(V2Locations, ';')[OFFSET(0)], '#')[OFFSET(1)] AS CleanLocationName
+FROM
+gdelt-bq.gdeltv2.gkg
+WHERE
+LOWER(V2Themes) LIKE '%sorghum%'
+AND (
+LOWER(V2Themes) LIKE '%drought%'
+OR LOWER(V2Themes) LIKE '%warfare%'
+OR LOWER(V2Themes) LIKE '%flood%'
+OR LOWER(V2Themes) LIKE '%climate change%'
+OR LOWER(V2Themes) LIKE '%heatwave%'
+OR LOWER(V2Themes) LIKE '%pest infestation%'
+OR LOWER(V2Themes) LIKE '%food shortage%'
+OR LOWER(V2Themes) LIKE '%market volatility%'
+OR LOWER(V2Themes) LIKE '%civil unrest%'
+OR LOWER(V2Themes) LIKE '%conflict%'
+OR LOWER(V2Themes) LIKE '%inflation%'
+OR LOWER(V2Themes) LIKE '%food inflation%'
+OR LOWER(V2Themes) LIKE '%political instability%'
+)
+AND V2Locations LIKE '%Burkina Faso%'
+ORDER BY
+DATE DESC
+-- LIMIT 2000;
